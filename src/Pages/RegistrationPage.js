@@ -1,6 +1,8 @@
 // RegistrationPage.js
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios"; // Import Axios
 import "../index.css"; // Import the CSS file
 
 function RegistrationPage() {
@@ -20,24 +22,33 @@ function RegistrationPage() {
   const [dob, setDob] = useState("");
 
   const handleRegister = (e) => {
+    console.log("Register event Triggered");
     e.preventDefault();
-    // Logic to handle registration
-    console.log(
-      "Registering with:",
-      fullName,
-      email,
-      phone,
-      password,
-      address,
-      pinCode,
-      state,
-      district,
-      area,
-      locality,
-      landmark,
-      gstin,
-      dob
-    );
+
+    const userData = {
+      firstName: fullName,
+      emailId: email,
+      mobileNumber: phone,
+      password: password,
+      confirmPassword: confirmPassword,
+      pincode: pinCode,
+      state: state,
+      district: district,
+      landMark: landmark,
+      GST: gstin,
+      dob: dob,
+    };
+
+    axios
+      .post("http://localhost:8082/api/register", userData)
+      .then((response) => {
+        console.log("Registration successful:", response.data);
+        // You can perform any further actions based on the response, such as redirecting to another page
+      })
+      .catch((error) => {
+        console.error("There was a problem with the registration:", error);
+        // Handle any errors that occurred during the registration
+      });
   };
 
   return (

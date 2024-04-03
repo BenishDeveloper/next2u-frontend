@@ -1,16 +1,32 @@
 // LoginPage.js
+
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios"; // Import Axios
 import "../index.css"; // Import the CSS file
 
 function LoginPage() {
-  const [email, setEmail] = useState("");
+  const [userName, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Logic to handle login
-    console.log("Logging in with:", email, password);
+
+    const loginData = {
+      userName: userName,
+      password: password,
+    };
+
+    axios
+      .post("http://localhost:8082/api/login", loginData)
+      .then((response) => {
+        console.log("Login successful:", response.data);
+        navigate("/home", { state: { username: userName } });
+      })
+      .catch((error) => {
+        console.error("There was a problem with the login:", error);
+      });
   };
 
   return (
@@ -22,7 +38,7 @@ function LoginPage() {
           className="input-field"
           type="email"
           placeholder="Email"
-          value={email}
+          value={userName}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
